@@ -5,7 +5,7 @@ if inp <= 0:
     isPrime = False
 else:
     counter = int(inp/2)+1
-    for i in range(1,counter):
+    for i in range(2,counter):
         if inp // i == inp / i:
             isPrime = False
             break
