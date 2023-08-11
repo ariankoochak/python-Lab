@@ -25,7 +25,7 @@ for i in range(0,len(inp)):
         toggleCaseInp += inp[i]
         wordCaseInp += inp[i]
 
-print(f'\nall upperCase:\n{upperCaseInp}')
-print(f'\nall lowerCase:\n{lowerCaseInp}')
+print(f'\nupperCase:\n{upperCaseInp}')
+print(f'\nlowerCase:\n{lowerCaseInp}')
 print(f'\ntoggleCase:\n{toggleCaseInp}')
-print(f'\nwordcase:\n{wordCaseInp}')
+print(f'\nwordcase:\n{wordCaseInp}\n')
