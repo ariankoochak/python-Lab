@@ -32,7 +32,7 @@ def pushToVoteNum(name,num):
         voteNum.append([name,num])
     sumNum += num
 
-f = open("/Users/arian.koochakgmail.com/Desktop/Code/python-Lab/part-7/readCSV/info.csv","r")
+f = open(r"c:\Users\Arian\Desktop\Code\python-Lab\part-7\readCSV\info.csv","r")
 textFile = f.read().split('\n');
 f.close();
 
@@ -44,4 +44,4 @@ for i in range(1,len(textFile)):
 
 print()
 for i in range(0,len(voteNum)):
-    print(f"{voteNum[i][0]} => {voteNum[i][1]}\t\t {int(voteNum[i][1] * 100 / sumNum)}%")
+    print(f"{voteNum[i][0]}=> {voteNum[i][1]}\t\t {int(voteNum[i][1] * 100 / sumNum)}%\n")
