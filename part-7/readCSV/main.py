@@ -19,7 +19,9 @@ def listMaker(inp):
     return exp
 
 voteNum = []
+sumNum = 0
 def pushToVoteNum(name,num):
+    global sumNum
     flag = True
     for vote in voteNum:
         if vote[0] == name:
@@ -28,6 +30,7 @@ def pushToVoteNum(name,num):
             break;
     if flag:
         voteNum.append([name,num])
+    sumNum += num
 
 f = open("/Users/arian.koochakgmail.com/Desktop/Code/python-Lab/part-7/readCSV/info.csv","r")
 textFile = f.read().split('\n');
@@ -41,4 +44,4 @@ for i in range(1,len(textFile)):
 
 print()
 for i in range(0,len(voteNum)):
-    print(f"{voteNum[i][0]} => {voteNum[i][1]}\n")
+    print(f"{voteNum[i][0]} => {voteNum[i][1]}\t\t {int(voteNum[i][1] * 100 / sumNum)}%")
