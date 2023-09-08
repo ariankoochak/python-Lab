@@ -38,4 +38,7 @@ timer = threading.Thread(target = loadThread)
 main.start()
 timer.start()
 
+main.join()
+timer.join()
 
+print(f'\n{len(template)}')
