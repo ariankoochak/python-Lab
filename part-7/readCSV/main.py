@@ -62,11 +62,15 @@ def loadThread():
     global voteNum
     global counter
     while(counter < len(textFile)-1):
-        print(f'{int(100 * counter / len(textFile))}%') 
-        time.sleep(0.25)
+        percent = int(100 * counter / len(textFile))
         os.system('cls')
+        print(f'{percent}%') 
+        print('+'*percent,'-'*(100-percent),sep='')
+        time.sleep(0.25)
     print()
     sortVote()
+    os.system('cls')
+    print('100%\n','+'*100,sep='')
     for i in range(0,len(voteNum)):
         print(f"{voteNum[i][0]}=> {voteNum[i][1]}\t\t {int(voteNum[i][1] * 100 / sumNum)}%\n")
 
@@ -75,6 +79,9 @@ timer = threading.Thread(target = loadThread)
 
 main.start()
 timer.start()
+
+
+
 
 
 
