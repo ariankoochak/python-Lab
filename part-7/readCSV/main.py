@@ -1,3 +1,7 @@
+import os
+import threading
+import time
+
 def isInt(inp):
     for i in inp:
         if i < '0' or i > '9':
@@ -31,17 +35,50 @@ def pushToVoteNum(name,num):
     if flag:
         voteNum.append([name,num])
     sumNum += num
+def sortVote():
+    global voteNum
+    for i in range(0,len(voteNum)):
+        for j in range(0,len(voteNum)):
+            if(voteNum[i][1] > voteNum[j][1]):
+                tmp = voteNum[i];
+                voteNum[i] = voteNum[j];
+                voteNum[j] = tmp;
 
-f = open(r"c:\Users\Arian\Desktop\Code\python-Lab\part-7\readCSV\info.csv","r")
+f = open(r"c:\Users\Arian\Desktop\Code\python-Lab\part-7\readCSV\bigData.csv","r")
 textFile = f.read().split('\n');
 f.close();
+counter = 0
+def mainThread():
+    global textFile
+    global counter
+    for i in range(1,len(textFile)):
+        counter = i
+        textFile[i] = listMaker(textFile[i])
+        for j in range(0,len(textFile[i][2])):
+            pushToVoteNum(textFile[i][2][j],textFile[i][3][j])
+        counter = i
+def loadThread():
+    global textFile
+    global voteNum
+    global counter
+    while(counter < len(textFile)-1):
+        print(f'{int(100 * counter / len(textFile))}%') 
+        time.sleep(0.25)
+        os.system('cls')
+    print()
+    sortVote()
+    for i in range(0,len(voteNum)):
+        print(f"{voteNum[i][0]}=> {voteNum[i][1]}\t\t {int(voteNum[i][1] * 100 / sumNum)}%\n")
+
+main = threading.Thread(target=mainThread)
+timer = threading.Thread(target = loadThread)
+
+main.start()
+timer.start()
 
 
-for i in range(1,len(textFile)):
-    textFile[i] = listMaker(textFile[i])
-    for j in range(0,len(textFile[i][2])):
-        pushToVoteNum(textFile[i][2][j],textFile[i][3][j])
 
-print()
-for i in range(0,len(voteNum)):
-    print(f"{voteNum[i][0]}=> {voteNum[i][1]}\t\t {int(voteNum[i][1] * 100 / sumNum)}%\n")
+        
+    
+
+
