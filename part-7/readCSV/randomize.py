@@ -4,6 +4,7 @@ import os
 import threading
 import time
 #0,3,LIBERAL;NDP;GREEN;CPC,1;1;3;2,NO;NO;YES;YES
+rowNum = int(input('enter row numbers: '))
 def randomYesNo():
     num = random.randrange(0, 100)
     if num >= 50:
@@ -14,7 +15,8 @@ template = []
 def mainThread():
     global template
     global j
-    for i in range(0,100000000):
+    global rowNum
+    for i in range(0,rowNum):
         hezb = ['LIBERAL','NDP','GREEN','CPC']
         random.shuffle(hezb)
         hezb = ";".join(hezb)
@@ -25,11 +27,14 @@ def mainThread():
         for item in template:
             writer.writerow([item])
 def loadThread():
-    while(len(template) < 100000000):
+    global rowNum
+    while(len(template) < rowNum):
         # os.system('clear')
-        print(f'{int(100 * len(template) / 100000000)}%') 
-        time.sleep(0.25)
+        percent = int(100 * len(template) / rowNum)
         os.system('cls')
+        print(f'{percent}%') 
+        print('+'*percent,'-'*(100-percent),sep='')
+        time.sleep(0.25)
     
 
 main = threading.Thread(target=mainThread)
@@ -40,5 +45,6 @@ timer.start()
 
 main.join()
 timer.join()
-
-print(f'\n{len(template)}')
+os.system('cls')
+print('100%\n','+'*100,sep='')
+print(f'\n{len(template)} rows created successfully!\n')
