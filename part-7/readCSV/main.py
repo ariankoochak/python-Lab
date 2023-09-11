@@ -24,6 +24,11 @@ def listMaker(inp):
 
 voteNum = []
 sumNum = 0
+sumAllScore = 0
+def summing(arr):
+    global sumAllScore
+    for i in arr:
+        sumAllScore += i
 def pushToVoteNum(name,num):
     global sumNum
     flag = True
@@ -44,7 +49,8 @@ def sortVote():
                 voteNum[i] = voteNum[j];
                 voteNum[j] = tmp;
 
-f = open(r"c:\Users\Arian\Desktop\Code\python-Lab\part-7\readCSV\bigData.csv","r")
+
+f = open(r"/Users/arian.koochakgmail.com/Desktop/Code/python-Lab/part-7/readCSV/bigData.csv","r")
 textFile = f.read().split('\n');
 f.close();
 counter = 0
@@ -57,22 +63,32 @@ def mainThread():
         for j in range(0,len(textFile[i][2])):
             pushToVoteNum(textFile[i][2][j],textFile[i][3][j])
         counter = i
+def resultMaker():
+    global voteNum
+    global sumAllScore
+    sortVote()
+    res = ''
+    for i in range(0,len(voteNum)):
+        res += f"{i+1}- {voteNum[i][0]} => {voteNum[i][1]}\t\t\t {int(voteNum[i][1] * 100 / sumNum)}%\n\n"
+    return res
+
 def loadThread():
     global textFile
     global voteNum
     global counter
     while(counter < len(textFile)-1):
         percent = int(100 * counter / len(textFile))
-        os.system('cls')
+        os.system('clear')
         print(f'{percent}%') 
         print('+'*percent,'-'*(100-percent),sep='')
+        print(resultMaker())
         time.sleep(0.25)
     print()
     sortVote()
-    os.system('cls')
+    os.system('clear')
     print('100%\n','+'*100,sep='')
     for i in range(0,len(voteNum)):
-        print(f"{voteNum[i][0]}=> {voteNum[i][1]}\t\t {int(voteNum[i][1] * 100 / sumNum)}%\n")
+        print(f"{i+1}- {voteNum[i][0]} => {voteNum[i][1]}\t\t\t {int(voteNum[i][1] * 100 / sumNum)}%\n\n")
 
 main = threading.Thread(target=mainThread)
 timer = threading.Thread(target = loadThread)

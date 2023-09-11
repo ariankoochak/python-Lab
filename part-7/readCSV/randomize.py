@@ -31,7 +31,7 @@ def loadThread():
     while(len(template) < rowNum):
         # os.system('clear')
         percent = int(100 * len(template) / rowNum)
-        os.system('cls')
+        os.system('clear')
         print(f'{percent}%') 
         print('+'*percent,'-'*(100-percent),sep='')
         time.sleep(0.25)
@@ -45,6 +45,6 @@ timer.start()
 
 main.join()
 timer.join()
-os.system('cls')
+os.system('clear')
 print('100%\n','+'*100,sep='')
 print(f'\n{len(template)} rows created successfully!\n')
