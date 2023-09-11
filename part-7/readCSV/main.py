@@ -1,7 +1,8 @@
 import os
 import threading
 import time
-
+import platform
+platform.platform()
 def isInt(inp):
     for i in inp:
         if i < '0' or i > '9':
