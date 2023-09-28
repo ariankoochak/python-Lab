@@ -1,0 +1,7 @@
+riazi,3
+fizik,3
+dini,2
+arabi,2
+zaban,2
+shimi,2
+farsi,2
