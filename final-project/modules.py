@@ -1,3 +1,4 @@
+import os
 def readFile(path):
     db = open(path,'r')
     exp = db.readlines();
@@ -14,3 +15,14 @@ def cleanFile(inp):
             preDict[inp[0][j]] = inp[i][j]
         exp[inp[i][0]] = preDict 
     return exp
+
+def showDatas(inp):
+    TerminalWidth = os.get_terminal_size().columns
+    print("="*TerminalWidth)
+    counter = 1
+    for key in inp:
+        print()
+        print(counter," ",end="")
+        counter += 1
+        for i in inp[key]:
+            print("%15s"%inp[key][i],end="")
