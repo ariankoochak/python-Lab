@@ -39,7 +39,23 @@ def calculateSumInFactor(orders,inp,commoditiesLits):
     exp = 0
     for item in orders:
         exp += int(commoditiesLits[item[0]]['price']) * int(item[1])
-    return exp
+    return str(exp)
+
+def pricePrettier(inp):
+    exp = []
+    saved = []
+    for i in range(len(inp)-1,-1,-1):
+        saved.append(inp[i])
+        if len(saved) == 3:
+            saved.reverse();
+            exp.append(''.join(saved))
+            saved.clear()
+    if len(inp) % 3 != 0:
+        saved.reverse();
+        exp.append(''.join(saved))
+    exp.reverse()
+    print(exp)
+    return f"{','.join(exp)} Toman"
 
 def cleanFactorFile(inp,commoditiesLits):
     exp = {}
@@ -53,7 +69,7 @@ def cleanFactorFile(inp,commoditiesLits):
             elif inp[0][j] == 'orders':
                 preDict[inp[0][j]] = handleOrderInFactor(inp[i][j])
             elif inp[0][j] == 'sum':
-                preDict[inp[0][j]] = calculateSumInFactor(preDict['orders'],inp[i][j],commoditiesLits)
+                preDict[inp[0][j]] = pricePrettier(calculateSumInFactor(preDict['orders'],inp[i][j],commoditiesLits))
             else:
                 preDict[inp[0][j]] = inp[i][j]
         exp[inp[i][0]] = preDict
