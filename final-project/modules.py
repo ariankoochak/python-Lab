@@ -32,7 +32,7 @@ def handleOrderInFactor(inp):
         inp[i] = inp[i].split(':')
     return inp
 
-def handlePaymentSitInFactor(inp):
+def handleBooleanDataInFactor(inp):
     return (inp.upper() == 'TRUE')
 
 def calculateSumInFactor(orders,inp,commoditiesLits):
@@ -54,8 +54,11 @@ def pricePrettier(inp):
         saved.reverse();
         exp.append(''.join(saved))
     exp.reverse()
-    print(exp)
     return f"{','.join(exp)} Toman"
+def handleVisualOrderInFactor(inp,commoditiesLits):
+    for i in range(len(inp)):
+        inp[i] = f'{commoditiesLits[inp[i][0]]["name"]} -> {inp[i][1]} adad'
+    return inp
 
 def cleanFactorFile(inp,commoditiesLits):
     exp = {}
@@ -64,8 +67,8 @@ def cleanFactorFile(inp,commoditiesLits):
         inp[i] = inp[i][:-1].split(',')
         preDict = {}
         for j in range(1,len(inp[i])):
-            if inp[0][j] == 'payment_sit':
-                preDict[inp[0][j]] = handlePaymentSitInFactor(inp[i][j])
+            if inp[0][j] == 'payment_sit' or inp[0][j] == 'is_sent':
+                preDict[inp[0][j]] = handleBooleanDataInFactor(inp[i][j])
             elif inp[0][j] == 'orders':
                 preDict[inp[0][j]] = handleOrderInFactor(inp[i][j])
             elif inp[0][j] == 'sum':
@@ -73,5 +76,6 @@ def cleanFactorFile(inp,commoditiesLits):
             else:
                 preDict[inp[0][j]] = inp[i][j]
         exp[inp[i][0]] = preDict
+        exp[inp[i][0]]['orders'] = handleVisualOrderInFactor(exp[inp[i][0]]['orders'],commoditiesLits)
         # print(exp)
     return exp
