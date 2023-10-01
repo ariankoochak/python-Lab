@@ -1,5 +1,8 @@
 import os
 import platform
+
+commodityTitle = []
+
 def readFile(path):
     db = open(path,'r')
     exp = db.readlines();
@@ -9,6 +12,7 @@ def readFile(path):
 def cleanFile(inp):
     exp = {}
     inp[0] = inp[0][:-1].split(',')
+    exp['titles'] = inp[0]
     for i in range(1,len(inp)):
         inp[i] = inp[i][:-1].split(',')
         preDict = {}
@@ -22,11 +26,13 @@ def showDatas(inp):
     print("="*TerminalWidth)
     counter = 1
     for key in inp:
-        print()
-        print(counter," ",end="")
-        counter += 1
-        for i in inp[key]:
-            print("%15s"%inp[key][i],end="")
+        if key != 'titles':
+            print()
+            print(counter," ",end="")
+            counter += 1
+            for i in inp[key]:
+                print("%15s"%inp[key][i],end="")
+
 def handleOrderInFactor(inp):
     inp = inp.split(';')
     for i in range(len(inp)):
@@ -92,3 +98,31 @@ def clearTerminal():
     if platform.system() == 'Windows':
         deleteMod = 'cls'
     os.system(deleteMod)
+
+def getProduct(inp):
+    commodity = []
+    command = None
+    for key in inp['titles']:
+        if key == 'name':
+            name = input(f'enter {key} : ')
+            for i in range(1,len(inp.keys())):
+                if (inp[str(i)]['name'] == name):
+                    command = input('your product is duplicate do you want to change it?(y/n): ')
+                    if (command.lower() == 'y'):
+                        return i
+                    else:
+                        break
+            commodity.append(name)
+        elif key != 'id':
+            commodity.append(input(f'enter {key} : '))
+        else:
+            commodity.append(str(len(inp.keys())))
+            
+    return ','.join(commodity)
+
+def pushToFile(path,lineForAdd):
+    db = open(path,'a')
+    db.write(lineForAdd+'\n')
+    db.close()
+
+    

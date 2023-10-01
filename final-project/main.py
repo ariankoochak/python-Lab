@@ -16,10 +16,11 @@ costumers = cleanFile(readFile(costumerPath))
 factors = cleanFactorFile(readFile(factorPath),commodities)
 
 
-def adminPanel(panelMode):
+def adminPanel(panelMode,productIdForEdit = None):
+    clearTerminal()
+    global commodities
     match panelMode:
         case 'home':
-            clearTerminal()
             print('\nwelcome to admin panel \n\nProduct List(P)\nCostumers List(C)\nFactors List(F)\nAdd Factor(A)')
             command = getCommand('p','c','f','a')
             match command:
@@ -34,7 +35,6 @@ def adminPanel(panelMode):
                 case _:
                     print('invalid command')
         case 'productList':
-            clearTerminal()
             showDatas(commodities)
             print('\n\nback(B)\t\tedit(E)\t\tremove(R)\t\taddProduct(A)')
             command = getCommand('b','e','r','a')
@@ -49,6 +49,18 @@ def adminPanel(panelMode):
                     adminPanel('home')
                 case _:
                     print('invalid command')
+        case 'addProduct':
+            product = getProduct(commodities)
+            if(isinstance(product,int)):
+                adminPanel('editProduct',product)
+            else:
+                pushToFile(commodityPath,product)
+                commodities = cleanFile(readFile(commodityPath))
+                print('product added successfully!')
+                input('press enter for continue... ')
+                adminPanel('productList')
+        case 'editProduct':
+            print(productIdForEdit)
         case _:
             print('invalid panelMode')
 
