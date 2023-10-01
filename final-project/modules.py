@@ -1,4 +1,5 @@
 import os
+import platform
 def readFile(path):
     db = open(path,'r')
     exp = db.readlines();
@@ -79,3 +80,15 @@ def cleanFactorFile(inp,commoditiesLits):
         exp[inp[i][0]]['orders'] = handleVisualOrderInFactor(exp[inp[i][0]]['orders'],commoditiesLits)
         # print(exp)
     return exp
+
+def getCommand(*allowedCommands):
+    exp = input('enter your command : ').lower()
+    while exp not in allowedCommands:
+        exp = input('\nenter valid command: ')
+    return exp
+
+def clearTerminal():
+    deleteMod = 'clear'
+    if platform.system() == 'Windows':
+        deleteMod = 'cls'
+    os.system(deleteMod)

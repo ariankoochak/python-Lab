@@ -1,12 +1,55 @@
 from modules import *
-import os
 
-# commodityPath = "c:\\Users\\Arian\\Desktop\\Code\python-Lab\\final-project\\data\\commodity.csv" for windows
-commodityPath = "/Users/arian.koochakgmail.com/Desktop/Code/python-Lab/final-project/data/commodity.csv"
-costumerPath = '/Users/arian.koochakgmail.com/Desktop/Code/python-Lab/final-project/data/costumers.csv'
-factorPath = '/Users/arian.koochakgmail.com/Desktop/Code/python-Lab/final-project/data/factor.csv'
+
+# for windows
+commodityPath = "c:\\Users\\Arian\\Desktop\\Code\python-Lab\\final-project\\data\\commodity.csv"
+costumerPath = "c:\\Users\\Arian\\Desktop\\Code\python-Lab\\final-project\\data\\costumers.csv"
+factorPath = "c:\\Users\\Arian\\Desktop\\Code\python-Lab\\final-project\\data\\factor.csv"
+
+#for mac
+# commodityPath = "/Users/arian.koochakgmail.com/Desktop/Code/python-Lab/final-project/data/commodity.csv"
+# costumerPath = '/Users/arian.koochakgmail.com/Desktop/Code/python-Lab/final-project/data/costumers.csv'
+# factorPath = '/Users/arian.koochakgmail.com/Desktop/Code/python-Lab/final-project/data/factor.csv'
 
 commodities = cleanFile(readFile(commodityPath))
 costumers = cleanFile(readFile(costumerPath))
 factors = cleanFactorFile(readFile(factorPath),commodities)
-showDatas(factors)
+
+
+def adminPanel(panelMode):
+    match panelMode:
+        case 'home':
+            clearTerminal()
+            print('\nwelcome to admin panel \n\nProduct List(P)\nCostumers List(C)\nFactors List(F)\nAdd Factor(A)')
+            command = getCommand('p','c','f','a')
+            match command:
+                case 'a':
+                    adminPanel('addFactor')
+                case 'f':
+                    adminPanel('factorList')
+                case 'c':
+                    adminPanel('costumerList')
+                case 'p':
+                    adminPanel('productList')
+                case _:
+                    print('invalid command')
+        case 'productList':
+            clearTerminal()
+            showDatas(commodities)
+            print('\n\nback(B)\t\tedit(E)\t\tremove(R)\t\taddProduct(A)')
+            command = getCommand('b','e','r','a')
+            match command:
+                case 'a':
+                    adminPanel('addProduct')
+                case 'r':
+                    adminPanel('removeProduct')
+                case 'e':
+                    adminPanel('editProduct')
+                case 'b':
+                    adminPanel('home')
+                case _:
+                    print('invalid command')
+        case _:
+            print('invalid panelMode')
+
+adminPanel('home')
