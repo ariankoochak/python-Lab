@@ -16,7 +16,7 @@ costumers = cleanFile(readFile(costumerPath))
 factors = cleanFactorFile(readFile(factorPath),commodities)
 
 
-def adminPanel(panelMode,productIdPointer = ''):
+def adminPanel(panelMode,idPointer = ''):
     clearTerminal()
     global commodities
     global costumers
@@ -65,27 +65,31 @@ def adminPanel(panelMode,productIdPointer = ''):
                 input('press enter for continue... ')
                 adminPanel('productList')
         case 'editProduct':
-            if productIdPointer == '':
-                name = input(f'enter product name for change : ')
+            if idPointer == '':
+                showDatas(commodities)
+                name = input(f'\n\nenter product name for change : ')
                 for i in range(1,len(commodities.keys())):
                      if (commodities[str(i)]['name'] == name):
-                        productIdPointer = str(i)
-            editedProduct = editProduct(commodities,productIdPointer)
-            editFile(commodityPath,editedProduct,productIdPointer)
+                        idPointer = str(i)
+            clearTerminal()
+            editedProduct = editData(commodities,idPointer,'product')
+            editFile(commodityPath,editedProduct,idPointer)
             print('product edited successfully!')
             input('press enter for continue... ')
             commodities = cleanFile(readFile(commodityPath))
             adminPanel('productList')
         case 'removeProduct':
-            if productIdPointer == '':
-                name = input(f'enter product name for delete : ')
+            if idPointer == '':
+                showDatas(commodities)
+                name = input(f'\n\nenter product name for delete : ')
                 for i in range(1,len(commodities.keys())):
                      if (commodities[str(i)]['name'] == name):
-                        productIdPointer = str(i)
-            command = input(f'Are you sure you want to delete {commodities[productIdPointer]["name"]}?(y/n) ')
+                        idPointer = str(i)
+            clearTerminal();
+            command = input(f'Are you sure you want to delete {commodities[idPointer]["name"]}?(y/n) ')
             if command.lower() == 'y':
-                deleteFromFile(commodityPath,productIdPointer)
-                print('product edited successfully!')
+                deleteFromFile(commodityPath,idPointer)
+                print('\n\nproduct removed successfully!')
                 input('press enter for continue... ')
             commodities = cleanFile(readFile(commodityPath))
             adminPanel('productList')
@@ -110,7 +114,29 @@ def adminPanel(panelMode,productIdPointer = ''):
             costumers = cleanFile(readFile(costumerPath))
             print('costumer added successfully!')
             input('press enter for continue... ')
-            adminPanel('costumerList')          
+            adminPanel('costumerList')   
+        case 'editCostumer':
+            if idPointer == '':
+                showDatas(costumers)
+                idPointer = input(f'\n\nenter costumer id for change : ')
+            clearTerminal()
+            editedCostumer = editData(costumers,idPointer,'costumer')
+            editFile(costumerPath,editedCostumer,idPointer)
+            print('costumer edited successfully!')
+            input('press enter for continue... ')
+            costumers = cleanFile(readFile(costumerPath))
+            adminPanel('costumerList')    
+        case 'removeCostumer':
+            if idPointer == '':
+                showDatas(costumers)
+                idPointer = input(f'\n\nenter costumer id for delete : ')
+            command = input(f'Are you sure you want to delete {costumers[idPointer]["name"]} {costumers[idPointer]["family"]}?(y/n) ')
+            if command.lower() == 'y':
+                deleteFromFile(costumerPath,idPointer)
+                print('\n\nproduct edited successfully!')
+                input('press enter for continue... ')
+            costumers = cleanFile(readFile(costumerPath))
+            adminPanel('costumerList')
         case _:
             print('invalid panelMode')
 

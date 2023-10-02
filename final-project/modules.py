@@ -24,12 +24,10 @@ def cleanFile(inp):
 def showDatas(inp):
     TerminalWidth = os.get_terminal_size().columns
     print("="*TerminalWidth)
-    counter = 1
     for key in inp:
         if key != 'titles':
             print()
-            print(counter," ",end="")
-            counter += 1
+            print(key," ",end="")
             for i in inp[key]:
                 print("%15s"%inp[key][i],end="")
 
@@ -127,18 +125,18 @@ def getNewCostumer(inp):
             exp.append(str(len(inp.keys())))
     return ','.join(exp)
 
-def editProduct(inp,productId):
-    commodity = []
+def editData(inp,id,mode):
+    exp = []
     for key in inp['titles']:
         if key != 'id':
-            temp = input(f'enter new {key} (default value = {inp[productId][key]}): ')
-            if key != 'name':
+            temp = input(f'enter new {key} (default value = {inp[id][key]}): ')
+            if key != 'name' and mode == 'product':
                 while isInt(temp) == False:
-                    temp = input(f'\nplease enter valid data (default value = {inp[productId][key]}): ')
-            commodity.append(temp)
+                    temp = input(f'\nplease enter valid data (default value = {inp[id][key]}): ')
+            exp.append(temp)
         else:
-            commodity.append(productId)
-    return ','.join(commodity)
+            exp.append(id)
+    return ','.join(exp)
 
 
 def pushToFile(path,lineForAdd):
@@ -166,6 +164,7 @@ def deleteFromFile(path,id):
         temp = exp[i].split(',')
         if temp[0] == id:
             exp.pop(i)
+            break;
     db = open(path,'w')
     db.write(''.join(exp))
     db.close()
