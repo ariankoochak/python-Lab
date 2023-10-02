@@ -67,10 +67,11 @@ def adminPanel(panelMode,idPointer = ''):
         case 'editProduct':
             if idPointer == '':
                 showDatas(commodities)
-                name = input(f'\n\nenter product name for change : ')
-                for i in range(1,len(commodities.keys())):
-                     if (commodities[str(i)]['name'] == name):
-                        idPointer = str(i)
+                name = input(f'\n\nenter product name for delete : ')
+                idPointer = findProductIdFromName(commodities,name)
+                while idPointer == -1:
+                    name = input(f'\n\nproduct not found,please try again : ')
+                    idPointer = findProductIdFromName(commodities,name)
             clearTerminal()
             editedProduct = editData(commodities,idPointer,'product')
             editFile(commodityPath,editedProduct,idPointer)
@@ -82,9 +83,10 @@ def adminPanel(panelMode,idPointer = ''):
             if idPointer == '':
                 showDatas(commodities)
                 name = input(f'\n\nenter product name for delete : ')
-                for i in range(1,len(commodities.keys())):
-                     if (commodities[str(i)]['name'] == name):
-                        idPointer = str(i)
+                idPointer = findProductIdFromName(commodities,name)
+                while idPointer == -1:
+                    name = input(f'\n\nproduct not found,please try again : ')
+                    idPointer = findProductIdFromName(commodities,name)
             clearTerminal();
             command = input(f'Are you sure you want to delete {commodities[idPointer]["name"]}?(y/n) ')
             if command.lower() == 'y':
@@ -119,6 +121,8 @@ def adminPanel(panelMode,idPointer = ''):
             if idPointer == '':
                 showDatas(costumers)
                 idPointer = input(f'\n\nenter costumer id for change : ')
+                while findFromId(costumers,idPointer) == -1:
+                    idPointer = input(f'\n\nid not found,please try again : ')
             clearTerminal()
             editedCostumer = editData(costumers,idPointer,'costumer')
             editFile(costumerPath,editedCostumer,idPointer)
@@ -130,6 +134,8 @@ def adminPanel(panelMode,idPointer = ''):
             if idPointer == '':
                 showDatas(costumers)
                 idPointer = input(f'\n\nenter costumer id for delete : ')
+                while findFromId(costumers,idPointer) == -1:
+                    idPointer = input(f'\n\nid not found,please try again : ')
             command = input(f'Are you sure you want to delete {costumers[idPointer]["name"]} {costumers[idPointer]["family"]}?(y/n) ')
             if command.lower() == 'y':
                 deleteFromFile(costumerPath,idPointer)
@@ -157,7 +163,9 @@ def adminPanel(panelMode,idPointer = ''):
         case 'showFactorDetails':
             if idPointer == '':
                 showDatas(factors,True)
-                idPointer = input(f'\n\nenter factor id for show : ')
+                idPointer = input(f'\n\nenter factor id for get details : ')
+                while findFromId(factors,idPointer) == -1:
+                    idPointer = input(f'\n\nid not found,please try again : ')
             clearTerminal()
             showFactorDetails(factors,costumers,idPointer)
             print('\n\nback(B)\t\tedit(E)\t\tremove(R)')
@@ -174,7 +182,9 @@ def adminPanel(panelMode,idPointer = ''):
         case "editFactor":
             if idPointer == '':
                 showDatas(factors,True)
-                idPointer = input(f'\n\nenter factor id for change : ')
+                idPointer = input(f'\n\nenter factor id for edit : ')
+                while findFromId(factors,idPointer) == -1:
+                    idPointer = input(f'\n\nid not found,please try again : ')
             clearTerminal()
             editedFactor = editFactor(factors,idPointer,costumers,commodities)
             editFile(factorPath,editedFactor,idPointer)
@@ -185,7 +195,9 @@ def adminPanel(panelMode,idPointer = ''):
         case "removeFactor":
             if idPointer == '':
                 showDatas(factors,True)
-                idPointer = input(f'\n\nenter factor id for remove : ')
+                idPointer = input(f'\n\nenter factor id for delete : ')
+                while findFromId(factors,idPointer) == -1:
+                    idPointer = input(f'\n\nid not found,please try again : ')
             command = input(f'Are you sure you want to delete this factor?(y/n) ')
             if command.lower() == 'y':
                 deleteFromFile(factorPath,idPointer)
@@ -193,6 +205,8 @@ def adminPanel(panelMode,idPointer = ''):
                 input('press enter for continue... ')
             factors = cleanFactorFile(readFile(factorPath),commodities)
             adminPanel('factorList')
+        case "addFactor":
+            getFactor(factors,costumers)
         case _:
             print('invalid panelMode')
         

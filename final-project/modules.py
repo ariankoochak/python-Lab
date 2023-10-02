@@ -138,7 +138,7 @@ def getNewCostumer(inp):
             exp.append(newId)
     return ','.join(exp)
 
-def editData(inp,id,mode,*assets):
+def editData(inp,id,mode):
     exp = []
     for key in inp['titles']:
         if key != 'id':
@@ -261,3 +261,6 @@ def findFromId(inp,id):
         if i == id:
             return inp[i]
     return -1
+
+def getFactor(factors,costumers):
+    pass
