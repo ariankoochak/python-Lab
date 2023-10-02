@@ -21,7 +21,7 @@ def cleanFile(inp):
         exp[inp[i][0]] = preDict 
     return exp
 
-def showDatas(inp):
+def showDatas(inp,isFactor = False):
     TerminalWidth = os.get_terminal_size().columns
     print("="*TerminalWidth)
     for key in inp:
@@ -29,7 +29,13 @@ def showDatas(inp):
             print()
             print(key," ",end="")
             for i in inp[key]:
-                print("%15s"%inp[key][i],end="")
+                if isFactor:
+                    temp = f'\t{inp[key][i]}'
+                    if i == 'sum':
+                        temp = f'\t\t{inp[key][i]}'
+                    print(temp,end="")
+                else:
+                    print("%15s"%inp[key][i],end="")
 
 def handleOrderInFactor(inp):
     inp = inp.split(';')

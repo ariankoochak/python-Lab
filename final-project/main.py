@@ -137,6 +137,21 @@ def adminPanel(panelMode,idPointer = ''):
                 input('press enter for continue... ')
             costumers = cleanFile(readFile(costumerPath))
             adminPanel('costumerList')
+        case 'factorList':
+            showDatas(factors,True)
+            print('\n\nback(B)\t\tedit(E)\t\tremove(R)\t\taddFactor(A)')
+            command = getCommand('b','e','r','a')
+            match command:
+                case 'a':
+                    adminPanel('addFactor')
+                case 'r':
+                    adminPanel('removeFactor')
+                case 'e':
+                    adminPanel('editFactor')
+                case 'b':
+                    adminPanel('home')
+                case _:
+                    print('invalid command')
         case _:
             print('invalid panelMode')
 
