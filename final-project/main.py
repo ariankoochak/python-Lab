@@ -171,6 +171,28 @@ def adminPanel(panelMode,idPointer = ''):
                     adminPanel('factorList')
                 case _:
                     print('invalid command')
+        case "editFactor":
+            if idPointer == '':
+                showDatas(factors,True)
+                idPointer = input(f'\n\nenter factor id for change : ')
+            clearTerminal()
+            editedFactor = editFactor(factors,idPointer,costumers,commodities)
+            editFile(factorPath,editedFactor,idPointer)
+            print('factor edited successfully!')
+            input('press enter for continue... ')
+            factors = cleanFactorFile(readFile(factorPath),commodities)
+            adminPanel('factorList')
+        case "removeFactor":
+            if idPointer == '':
+                showDatas(factors,True)
+                idPointer = input(f'\n\nenter factor id for remove : ')
+            command = input(f'Are you sure you want to delete this factor?(y/n) ')
+            if command.lower() == 'y':
+                deleteFromFile(factorPath,idPointer)
+                print('\n\nproduct edited successfully!')
+                input('press enter for continue... ')
+            factors = cleanFactorFile(readFile(factorPath),commodities)
+            adminPanel('factorList')
         case _:
             print('invalid panelMode')
         

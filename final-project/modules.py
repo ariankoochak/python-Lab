@@ -46,7 +46,7 @@ def handleOrderInFactor(inp):
 def handleBooleanDataInFactor(inp):
     return (inp.upper() == 'TRUE')
 
-def calculateSumInFactor(orders,inp,commoditiesLits):
+def calculateSumInFactor(orders,commoditiesLits):
     exp = 0
     for item in orders:
         exp += int(commoditiesLits[item[0]]['price']) * int(item[1])
@@ -65,7 +65,8 @@ def pricePrettier(inp):
         saved.reverse();
         exp.append(''.join(saved))
     exp.reverse()
-    return f"{','.join(exp)} Toman"
+    return f"{'.'.join(exp)} Toman"
+
 def handleVisualOrderInFactor(inp,commoditiesLits):
     for i in range(len(inp)):
         inp[i] = f'{commoditiesLits[inp[i][0]]["name"]} -> {inp[i][1]} adad'
@@ -74,6 +75,7 @@ def handleVisualOrderInFactor(inp,commoditiesLits):
 def cleanFactorFile(inp,commoditiesLits):
     exp = {}
     inp[0] = inp[0][:-1].split(',')
+    exp['titles'] = inp[0]
     for i in range(1,len(inp)):
         inp[i] = inp[i][:-1].split(',')
         preDict = {}
@@ -83,7 +85,10 @@ def cleanFactorFile(inp,commoditiesLits):
             elif inp[0][j] == 'orders':
                 preDict[inp[0][j]] = handleOrderInFactor(inp[i][j])
             elif inp[0][j] == 'sum':
-                preDict[inp[0][j]] = pricePrettier(calculateSumInFactor(preDict['orders'],inp[i][j],commoditiesLits))
+                if inp[i][j] == 'null':
+                    preDict[inp[0][j]] = pricePrettier(calculateSumInFactor(preDict['orders'],commoditiesLits))
+                else:
+                    preDict[inp[0][j]] = inp[i][j]
             else:
                 preDict[inp[0][j]] = inp[i][j]
         exp[inp[i][0]] = preDict
@@ -106,11 +111,12 @@ def clearTerminal():
 def getNewProduct(inp):
     exp = []
     command = None
+    newId = str(int(list(inp.keys())[-1])+1)
     for key in inp['titles']:
         if key == 'name':
             name = input(f'enter {key} : ')
-            for i in range(1,len(inp.keys())):
-                if (inp[str(i)]['name'] == name):
+            for i in list(inp.keys())[1:]:
+                if (inp[i]['name'] == name):
                     command = input(f'your product is duplicate do you want to change it?(y/n): ')
                     if (command.lower() == 'y'):
                         return True
@@ -119,23 +125,24 @@ def getNewProduct(inp):
         elif key != 'id':
             exp.append(input(f'enter {key} : '))
         else:
-            exp.append(str(len(inp.keys())))
+            exp.append(newId)
     return ','.join(exp)
 
 def getNewCostumer(inp):
     exp = []
-    for key in inp['titles']:
+    newId = str(int(list(inp.keys())[-1])+1)
+    for key in list(inp.keys())[1:]:
         if key != 'id':
             exp.append(input(f'enter {key} : '))
         else:
-            exp.append(str(len(inp.keys())))
+            exp.append(newId)
     return ','.join(exp)
 
-def editData(inp,id,mode):
+def editData(inp,id,mode,*assets):
     exp = []
     for key in inp['titles']:
         if key != 'id':
-            temp = input(f'enter new {key} (default value = {inp[id][key]}): ')
+            temp = input(f'\nenter new {key} (default value = {inp[id][key]}): ')
             if key != 'name' and mode == 'product':
                 while isInt(temp) == False:
                     temp = input(f'\nplease enter valid data (default value = {inp[id][key]}): ')
@@ -144,6 +151,41 @@ def editData(inp,id,mode):
             exp.append(id)
     return ','.join(exp)
 
+def editFactor(factors,id,costumers,commodities):
+    exp = []
+    productsForFactor = '';
+    productsForCalculate = []
+    temp = []
+    for i in factors[id]['orders']:
+        i = i.split(' -> ');
+        i[0] = findProductIdFromName(commodities,i[0])
+        i[1] = i[1].split(' ')[0]
+        temp.append(':'.join(i))
+        productsForCalculate.append(i)
+    productsForFactor = ';'.join(temp)
+    for key in factors['titles']:
+        temp = id
+        if key == 'costumer_id':
+            showDatas(costumers);
+            temp = input(f'\nenter new {key} (default value = {factors[id][key]}): ')
+            while findFromId(costumers,temp) == -1:
+                temp = input(f'\nplease enter valid data (default value = {factors[id][key]}): ')
+        elif key == 'payment_sit' or key == 'is_sent':
+            temp = input(f'\nenter new {key} (default value = {factors[id][key]}): ').upper()
+            while not(temp == 'TRUE' or temp == 'FALSE'):
+                temp = input(f'\nplease enter valid data (default value = {factors[id][key]}): ').upper()
+        elif key == 'orders':
+            showDatas(commodities)
+            temp = input(f'\nenter new {key} (default value = {factors[id][key]}) (example value = product id ->2: numbers ->1;5:2;4:1;6:3): ')
+            if(temp == ''):
+                temp = productsForFactor;
+                print(temp)
+        elif key == 'sum':
+            temp = pricePrettier(calculateSumInFactor(productsForCalculate,commodities))
+        elif key != 'id':
+            temp = input(f'\nenter new {key} (default value = {factors[id][key]}): ')
+        exp.append(temp)
+    return ','.join(exp)
 
 def pushToFile(path,lineForAdd):
     db = open(path,'a')
@@ -206,3 +248,16 @@ def showFactorDetails(factors,costumers,id):
         print('pending for sent...\n')
     temp = f"====price of order : {factors[id]['sum']}"
     print(temp+("="*(TerminalWidth-len(temp))))
+    
+def findProductIdFromName(inp,name):
+    for i in inp.keys():
+        if i != 'titles':
+            if inp[i]['name'] == name:
+                return i
+    return -1
+
+def findFromId(inp,id):
+    for i in inp.keys():
+        if i == id:
+            return inp[i]
+    return -1
