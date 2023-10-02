@@ -24,6 +24,11 @@ def cleanFile(inp):
 
 def showDatas(inp,isFactor = False):
     print("="*TerminalWidth)
+    for title in inp['titles']:
+        if title == 'id':
+            print(title,end="")
+        else:
+            print("%15s"%title,end="")
     for key in inp:
         if key != 'titles':
             print()
@@ -36,6 +41,7 @@ def showDatas(inp,isFactor = False):
                     print(temp,end="")
                 else:
                     print("%15s"%inp[key][i],end="")
+        
 
 def handleOrderInFactor(inp):
     inp = inp.split(';')
