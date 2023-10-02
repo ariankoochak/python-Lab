@@ -19,6 +19,8 @@ factors = cleanFactorFile(readFile(factorPath),commodities)
 def adminPanel(panelMode,productIdPointer = ''):
     clearTerminal()
     global commodities
+    global costumers
+    global factors
     match panelMode:
         case 'home':
             print('\nwelcome to admin panel \n\nProduct List(P)\nCostumers List(C)\nFactors List(F)\nAdd Factor(A)')
@@ -50,9 +52,12 @@ def adminPanel(panelMode,productIdPointer = ''):
                 case _:
                     print('invalid command')
         case 'addProduct':
-            product = getProduct(commodities)
-            if(isinstance(product,int)):
-                adminPanel('editProduct',str(product))
+            product = getNewProduct(commodities)
+            if(isinstance(product,bool)):
+                if product:
+                    adminPanel('editProduct',str(product))
+                else:
+                    adminPanel('productList')
             else:
                 pushToFile(commodityPath,product)
                 commodities = cleanFile(readFile(commodityPath))
@@ -84,6 +89,28 @@ def adminPanel(panelMode,productIdPointer = ''):
                 input('press enter for continue... ')
             commodities = cleanFile(readFile(commodityPath))
             adminPanel('productList')
+        case 'costumerList':
+            showDatas(costumers)
+            print('\n\nback(B)\t\tedit(E)\t\tremove(R)\t\taddCostumers(A)')
+            command = getCommand('b','e','r','a')
+            match command:
+                case 'a':
+                    adminPanel('addCostumer')
+                case 'r':
+                    adminPanel('removeCostumer')
+                case 'e':
+                    adminPanel('editCostumer')
+                case 'b':
+                    adminPanel('home')
+                case _:
+                    print('invalid command')
+        case 'addCostumer':
+            costumer = getNewCostumer(costumers)
+            pushToFile(costumerPath,costumer)
+            costumers = cleanFile(readFile(costumerPath))
+            print('costumer added successfully!')
+            input('press enter for continue... ')
+            adminPanel('costumerList')          
         case _:
             print('invalid panelMode')
 

@@ -99,24 +99,33 @@ def clearTerminal():
         deleteMod = 'cls'
     os.system(deleteMod)
 
-def getProduct(inp):
-    commodity = []
+def getNewProduct(inp):
+    exp = []
     command = None
     for key in inp['titles']:
         if key == 'name':
             name = input(f'enter {key} : ')
             for i in range(1,len(inp.keys())):
                 if (inp[str(i)]['name'] == name):
-                    command = input('your product is duplicate do you want to change it?(y/n): ')
+                    command = input(f'your product is duplicate do you want to change it?(y/n): ')
                     if (command.lower() == 'y'):
-                        return i
-                    break
-            commodity.append(name)
+                        return True
+                    return False
+            exp.append(name)
         elif key != 'id':
-            commodity.append(input(f'enter {key} : '))
+            exp.append(input(f'enter {key} : '))
         else:
-            commodity.append(str(len(inp.keys())))
-    return ','.join(commodity)
+            exp.append(str(len(inp.keys())))
+    return ','.join(exp)
+
+def getNewCostumer(inp):
+    exp = []
+    for key in inp['titles']:
+        if key != 'id':
+            exp.append(input(f'enter {key} : '))
+        else:
+            exp.append(str(len(inp.keys())))
+    return ','.join(exp)
 
 def editProduct(inp,productId):
     commodity = []
