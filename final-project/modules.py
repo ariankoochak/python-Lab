@@ -110,19 +110,59 @@ def getProduct(inp):
                     command = input('your product is duplicate do you want to change it?(y/n): ')
                     if (command.lower() == 'y'):
                         return i
-                    else:
-                        break
+                    break
             commodity.append(name)
         elif key != 'id':
             commodity.append(input(f'enter {key} : '))
         else:
             commodity.append(str(len(inp.keys())))
-            
     return ','.join(commodity)
+
+def editProduct(inp,productId):
+    commodity = []
+    for key in inp['titles']:
+        if key != 'id':
+            temp = input(f'enter new {key} (default value = {inp[productId][key]}): ')
+            if key != 'name':
+                while isInt(temp) == False:
+                    temp = input(f'\nplease enter valid data (default value = {inp[productId][key]}): ')
+            commodity.append(temp)
+        else:
+            commodity.append(productId)
+    return ','.join(commodity)
+
 
 def pushToFile(path,lineForAdd):
     db = open(path,'a')
     db.write(lineForAdd+'\n')
     db.close()
 
+def editFile(path,lineForAdd,id):
+    db = open(path,'r')
+    exp = db.readlines()
+    db.close()
+    for i in range(len(exp)):
+        temp = exp[i].split(',')
+        if temp[0] == id:
+            exp[i] = lineForAdd+'\n'
+    db = open(path,'w')
+    db.write(''.join(exp))
+    db.close()
+
+def deleteFromFile(path,id):
+    db = open(path,'r')
+    exp = db.readlines()
+    db.close()
+    for i in range(len(exp)):
+        temp = exp[i].split(',')
+        if temp[0] == id:
+            exp.pop(i)
+    db = open(path,'w')
+    db.write(''.join(exp))
+    db.close()
     
+def isInt(inp):
+    for i in inp:
+        if(i < '0' or i > '9'):
+            return False
+    return True

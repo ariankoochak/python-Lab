@@ -16,7 +16,7 @@ costumers = cleanFile(readFile(costumerPath))
 factors = cleanFactorFile(readFile(factorPath),commodities)
 
 
-def adminPanel(panelMode,productIdForEdit = None):
+def adminPanel(panelMode,productIdPointer = ''):
     clearTerminal()
     global commodities
     match panelMode:
@@ -52,7 +52,7 @@ def adminPanel(panelMode,productIdForEdit = None):
         case 'addProduct':
             product = getProduct(commodities)
             if(isinstance(product,int)):
-                adminPanel('editProduct',product)
+                adminPanel('editProduct',str(product))
             else:
                 pushToFile(commodityPath,product)
                 commodities = cleanFile(readFile(commodityPath))
@@ -60,7 +60,30 @@ def adminPanel(panelMode,productIdForEdit = None):
                 input('press enter for continue... ')
                 adminPanel('productList')
         case 'editProduct':
-            print(productIdForEdit)
+            if productIdPointer == '':
+                name = input(f'enter product name for change : ')
+                for i in range(1,len(commodities.keys())):
+                     if (commodities[str(i)]['name'] == name):
+                        productIdPointer = str(i)
+            editedProduct = editProduct(commodities,productIdPointer)
+            editFile(commodityPath,editedProduct,productIdPointer)
+            print('product edited successfully!')
+            input('press enter for continue... ')
+            commodities = cleanFile(readFile(commodityPath))
+            adminPanel('productList')
+        case 'removeProduct':
+            if productIdPointer == '':
+                name = input(f'enter product name for delete : ')
+                for i in range(1,len(commodities.keys())):
+                     if (commodities[str(i)]['name'] == name):
+                        productIdPointer = str(i)
+            command = input(f'Are you sure you want to delete {commodities[productIdPointer]["name"]}?(y/n) ')
+            if command.lower() == 'y':
+                deleteFromFile(commodityPath,productIdPointer)
+                print('product edited successfully!')
+                input('press enter for continue... ')
+            commodities = cleanFile(readFile(commodityPath))
+            adminPanel('productList')
         case _:
             print('invalid panelMode')
 
