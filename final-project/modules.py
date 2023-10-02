@@ -42,7 +42,6 @@ def showDatas(inp,isFactor = False):
                 else:
                     print("%15s"%inp[key][i],end="")
         
-
 def handleOrderInFactor(inp):
     inp = inp.split(';')
     for i in range(len(inp)):
