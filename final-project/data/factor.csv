@@ -1,6 +1,6 @@
 id,costumer_id,payment_sit,orders,sum,is_sent
-1,5,TRUE,2:1;5:2;4:1;6:3,null,FALSE
-2,4,FALSE,1:1;4:3;10:1;8:2,null,FALSE
-3,1,FALSE,2:2;3:2;6:1;3:3,null,FALSE
-4,6,TRUE,2:1;9:4;5:1;7:3,null,TRUE
-5,2,TRUE,5:3;1:2;4:1;6:3,null,TRUE
+1,5,TRUE,2:1;5:2;4:1;6:3,318.000 Toman,FALSE
+2,4,FALSE,1:1;4:3;10:1;8:2,323.000 Toman,FALSE
+3,1,FALSE,2:2;3:2;6:1;3:3,301.000 Toman,FALSE
+4,6,TRUE,2:1;9:4;5:1;7:3,309.000 Toman,TRUE
+5,2,TRUE,5:3;1:2;4:1;6:3,465.000 Toman,TRUE
