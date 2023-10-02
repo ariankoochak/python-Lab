@@ -139,8 +139,8 @@ def adminPanel(panelMode,idPointer = ''):
             adminPanel('costumerList')
         case 'factorList':
             showDatas(factors,True)
-            print('\n\nback(B)\t\tedit(E)\t\tremove(R)\t\taddFactor(A)')
-            command = getCommand('b','e','r','a')
+            print('\n\nback(B)\t\tedit(E)\t\tremove(R)\t\taddFactor(A)\t\tshow Factor Details(S)')
+            command = getCommand('b','e','r','a','s')
             match command:
                 case 'a':
                     adminPanel('addFactor')
@@ -150,9 +150,28 @@ def adminPanel(panelMode,idPointer = ''):
                     adminPanel('editFactor')
                 case 'b':
                     adminPanel('home')
+                case 's':
+                    adminPanel('showFactorDetails')
+                case _:
+                    print('invalid command')
+        case 'showFactorDetails':
+            if idPointer == '':
+                showDatas(factors,True)
+                idPointer = input(f'\n\nenter factor id for show : ')
+            clearTerminal()
+            showFactorDetails(factors,costumers,idPointer)
+            print('\n\nback(B)\t\tedit(E)\t\tremove(R)')
+            command = getCommand('b','e','r')
+            match command:
+                case 'r':
+                    adminPanel('removeFactor',idPointer)
+                case 'e':
+                    adminPanel('editFactor',idPointer)
+                case 'b':
+                    adminPanel('factorList')
                 case _:
                     print('invalid command')
         case _:
             print('invalid panelMode')
-
+        
 adminPanel('home')

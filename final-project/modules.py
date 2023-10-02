@@ -2,6 +2,7 @@ import os
 import platform
 
 commodityTitle = []
+TerminalWidth = os.get_terminal_size().columns
 
 def readFile(path):
     db = open(path,'r')
@@ -22,7 +23,6 @@ def cleanFile(inp):
     return exp
 
 def showDatas(inp,isFactor = False):
-    TerminalWidth = os.get_terminal_size().columns
     print("="*TerminalWidth)
     for key in inp:
         if key != 'titles':
@@ -180,3 +180,29 @@ def isInt(inp):
         if(i < '0' or i > '9'):
             return False
     return True
+
+def showFactorDetails(factors,costumers,id):
+    print("==factor"+("="*(TerminalWidth-8)))
+    costumerId = factors[id]["costumer_id"]
+    
+    for key in costumers[costumerId]:
+        if(key != 'id'):
+            print(f"\n\tcostumer {key}: {costumers[costumerId][key]}")
+            
+    print('\n\tpayment sit: ',end ="")
+    if(factors[id]["payment_sit"]):
+        print('payed!')
+    else:
+        print('pending for pay...')
+        
+    print("\n\torders:")
+    for product in factors[id]["orders"]:
+        print(f"\n\t\t{product}",end='')
+        
+    print(f"\n\n\torder sit: ",end="")
+    if(factors[id]["is_sent"]):
+        print('sent\n')
+    else:
+        print('pending for sent...\n')
+    temp = f"====price of order : {factors[id]['sum']}"
+    print(temp+("="*(TerminalWidth-len(temp))))
