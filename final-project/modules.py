@@ -179,7 +179,6 @@ def editFactor(factors,id,costumers,commodities):
             temp = input(f'\nenter new {key} (default value = {factors[id][key]}) (example value = product id ->2: numbers ->1;5:2;4:1;6:3): ')
             if(temp == ''):
                 temp = productsForFactor;
-                print(temp)
         elif key == 'sum':
             temp = pricePrettier(calculateSumInFactor(productsForCalculate,commodities))
         elif key != 'id':
@@ -226,10 +225,10 @@ def isInt(inp):
 def showFactorDetails(factors,costumers,id):
     print("==factor"+("="*(TerminalWidth-8)))
     costumerId = factors[id]["costumer_id"]
-    
-    for key in costumers[costumerId]:
-        if(key != 'id'):
-            print(f"\n\tcostumer {key}: {costumers[costumerId][key]}")
+    if costumerId != 'null':
+        for key in costumers[costumerId]:
+            if(key != 'id'):
+                print(f"\n\tcostumer {key}: {costumers[costumerId][key]}")
             
     print('\n\tpayment sit: ',end ="")
     if(factors[id]["payment_sit"]):
@@ -262,5 +261,53 @@ def findFromId(inp,id):
             return inp[i]
     return -1
 
-def getFactor(factors,costumers):
-    pass
+def getFactor(factors,costumers,commodities):
+    newId = str(int(list(factors.keys())[-1])+1)
+    factors[newId] = {
+        'costumer_id' : 'null',
+        'payment_sit' : False,
+        'orders' : '',
+        'sum' : 'null',
+        'is_sent' : False,
+    }
+    exp = []
+    orders = []
+    exp.append(newId)
+    for key in factors['titles'][1:]:
+        clearTerminal()
+        showFactorDetails(factors,costumers,newId)
+        if key == 'costumer_id':
+            showDatas(costumers)
+            temp = input(f'\n\nenter costumer id: ')
+            while findFromId(costumers,temp) == -1:
+                temp = input(f'\n\nid not found,please try again : ')
+        elif key == 'payment_sit' or key == 'is_sent':
+            temp = 'False'
+        elif key == 'orders':
+            isContinue = 'y'
+            temp = []
+            while isContinue == 'y':
+                clearTerminal()
+                showDatas(commodities)
+                name = input(f'\n\nenter product name: ')
+                productId = findProductIdFromName(commodities,name)
+                while productId == -1:
+                    name = input(f'\n\nproduct not found,please try again : ')
+                    productId = findProductIdFromName(commodities,name)
+                num = input('\n\n enter numbers :')
+                while isInt(num) == False:
+                    num = input('\n\n number is invalid ,please enter number : ')
+                orders.append([productId,num])
+                temp.append(f'{productId}:{num}')
+                isContinue = input('do you want continue?(y/n): ').lower()
+            temp = ';'.join(temp)
+            exp.append(temp)
+            temp = handleOrderInFactor(temp)
+            factors[newId]['orders'] = handleVisualOrderInFactor(temp,commodities)
+        elif key == 'sum':
+            temp = pricePrettier(calculateSumInFactor(orders,commodities))
+        if key != 'orders':
+            factors[newId][key] = temp
+            exp.append(temp)
+    print(exp)
+    return ','.join(exp)

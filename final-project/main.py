@@ -206,7 +206,11 @@ def adminPanel(panelMode,idPointer = ''):
             factors = cleanFactorFile(readFile(factorPath),commodities)
             adminPanel('factorList')
         case "addFactor":
-            getFactor(factors,costumers)
+            newFactor = getFactor(factors,costumers,commodities)
+            pushToFile(factorPath,newFactor)
+            print('factor added successfully!')
+            input('press enter for continue... ')
+            adminPanel('factorList')   
         case _:
             print('invalid panelMode')
         
