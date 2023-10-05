@@ -1,15 +1,9 @@
 from modules import *
 
 
-# for windows
-commodityPath = "c:\\Users\\Arian\\Desktop\\Code\python-Lab\\final-project\\data\\commodity.csv"
-costumerPath = "c:\\Users\\Arian\\Desktop\\Code\python-Lab\\final-project\\data\\costumers.csv"
-factorPath = "c:\\Users\\Arian\\Desktop\\Code\python-Lab\\final-project\\data\\factor.csv"
-
-#for mac
-# commodityPath = "/Users/arian.koochakgmail.com/Desktop/Code/python-Lab/final-project/data/commodity.csv"
-# costumerPath = '/Users/arian.koochakgmail.com/Desktop/Code/python-Lab/final-project/data/costumers.csv'
-# factorPath = '/Users/arian.koochakgmail.com/Desktop/Code/python-Lab/final-project/data/factor.csv'
+commodityPath = r".\\data\\commodity.csv"
+costumerPath = r".\\data\\costumers.csv"
+factorPath = r".\\data\\factor.csv"
 
 commodities = cleanFile(readFile(commodityPath))
 costumers = cleanFile(readFile(costumerPath))
