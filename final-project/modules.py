@@ -54,7 +54,8 @@ def handleBooleanDataInFactor(inp):
 def calculateSumInFactor(orders,commoditiesLits):
     exp = 0
     for item in orders:
-        exp += int(commoditiesLits[item[0]]['price']) * int(item[1])
+        priceWithDiscount =  int(commoditiesLits[item[0]]['price']) * (100 - int(commoditiesLits[item[0]]['discount'])) / 100
+        exp += int(priceWithDiscount) * int(item[1])
     return str(exp)
 
 def pricePrettier(inp):
@@ -90,10 +91,7 @@ def cleanFactorFile(inp,commoditiesLits):
             elif inp[0][j] == 'orders':
                 preDict[inp[0][j]] = handleOrderInFactor(inp[i][j])
             elif inp[0][j] == 'sum':
-                if inp[i][j] == 'null':
-                    preDict[inp[0][j]] = pricePrettier(calculateSumInFactor(preDict['orders'],commoditiesLits))
-                else:
-                    preDict[inp[0][j]] = inp[i][j]
+                preDict[inp[0][j]] = pricePrettier(calculateSumInFactor(preDict['orders'],commoditiesLits))
             else:
                 preDict[inp[0][j]] = inp[i][j]
         exp[inp[i][0]] = preDict
@@ -314,5 +312,4 @@ def getFactor(factors,costumers,commodities):
         if key != 'orders':
             factors[newId][key] = temp
             exp.append(temp)
-    print(exp)
     return ','.join(exp)
